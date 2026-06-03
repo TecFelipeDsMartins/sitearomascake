@@ -10,7 +10,7 @@ export const PLASMIC = initPlasmicLoader({
     },
   ],
 
-  preview: process.env.PLASMIC_PREVIEW === "true",
+  preview: process.env.PLASMIC_PREVIEW,
 });
 
 // You can register any code components that you want to use here; see
