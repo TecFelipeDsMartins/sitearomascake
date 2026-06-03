@@ -1,0 +1,46 @@
+.accordion {
+  width: 100%;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item {
+  border-top: 1px solid #e2e8f0;
+}
+
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 0;
+  font-weight: 500;
+  transition: all 0.2s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.trigger:hover {
+  text-decoration: underline;
+}
+
+.icon {
+  font-size: 1.25rem;
+  color: #64748b;
+  transition: transform 0.2s;
+}
+
+.content {
+  overflow: hidden;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  padding-bottom: 1rem;
+  color: #475569;
+}
+
+.contentInner {
+  padding-top: 0;
+}
