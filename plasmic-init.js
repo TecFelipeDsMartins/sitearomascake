@@ -1,6 +1,6 @@
 import { initPlasmicLoader } from "@plasmicapp/loader-nextjs";
 
-import { AccordionDemo } from "./components/AccordionDemo";
+import { AromasAccordion, AromasAccordionItem } from "./components/AromasAccordion";
 
 export const PLASMIC = initPlasmicLoader({
   projects: [
@@ -13,15 +13,58 @@ export const PLASMIC = initPlasmicLoader({
   preview: process.env.PLASMIC_PREVIEW,
 });
 
-// You can register any code components that you want to use here; see
-// https://docs.plasmic.app/learn/code-components-ref/
-// And configure your Plasmic project to use the host url pointing at
-// the /plasmic-host page of your nextjs app (for example,
-// http://localhost:3000/plasmic-host).  See
-// https://docs.plasmic.app/learn/app-hosting/#set-a-plasmic-project-to-use-your-app-host
+// Registro do Container Principal
+PLASMIC.registerComponent(AromasAccordion, {
+  name: "AromasAccordion",
+  displayName: "📦 Accordion Container",
+  props: {
+    children: {
+      type: "slot",
+      allowedComponents: ["AromasAccordionItem"],
+      defaultValue: {
+        type: "component",
+        name: "AromasAccordionItem",
+      }
+    },
+    type: {
+      type: "choice",
+      options: ["single", "multiple"],
+      defaultValue: "single"
+    },
+    collapsible: {
+      type: "boolean",
+      defaultValue: true
+    }
+  },
+  importPath: "./components/AromasAccordion",
+});
 
-PLASMIC.registerComponent(AccordionDemo, {
-  name: "AccordionDemo",
-  props: {},
-  importPath: "./components/AccordionDemo",
+// Registro de cada Aba (Item)
+PLASMIC.registerComponent(AromasAccordionItem, {
+  name: "AromasAccordionItem",
+  displayName: "📄 Accordion Item",
+  props: {
+    title: {
+      type: "slot",
+      displayName: "Título (Pergunta)",
+      defaultValue: {
+        type: "text",
+        value: "Pergunta aqui...",
+      }
+    },
+    children: {
+      type: "slot",
+      displayName: "Conteúdo (Resposta)",
+      defaultValue: {
+        type: "text",
+        value: "Resposta aqui...",
+      }
+    },
+    value: {
+      type: "string",
+      displayName: "ID Único",
+      description: "Identificador para o estado do accordion"
+    }
+  },
+  importPath: "./components/AromasAccordion",
 });
