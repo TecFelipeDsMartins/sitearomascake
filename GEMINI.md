@@ -11,7 +11,9 @@
 - **`plasmic-init.js`**: Initializes the Plasmic loader. This is where the project ID and tokens are configured, and where custom code components should be registered.
 - **`pages/[[...catchall]].jsx`**: The dynamic catch-all route that fetches and renders pages defined in Plasmic Studio.
 - **`pages/plasmic-host.jsx`**: Accessible at `/plasmic-host`, this page allows Plasmic Studio to "host" the application for live previewing and code component interaction.
-- **`pages/api/hello.js`**: A sample API route.
+- **`components/`**: Directory for custom React components.
+  - **`ui/`**: Basic UI primitives (e.g., Accordion base).
+  - **`AromasAccordion.jsx`**: Modularized accordion components (`AromasAccordion`, `AromasAccordionItem`) registered for Plasmic.
 
 ## Building and Running
 
@@ -37,23 +39,14 @@ Runs ESLint to check for code quality and potential issues.
 npm run lint
 ```
 
-## Hybrid Development Workflow (Code + Design)
+## Custom Components & Plasmic Integration
 
-To ensure stability when working with both code components and visual design, follow this "Code First, Design Second" workflow. This prevents production errors where the design tries to use a component that hasn't been deployed yet.
+### Accordion (Modular)
+We have implemented a modular accordion system that allows for full visual customization in Plasmic Studio.
+- **AromasAccordion (Container)**: The main wrapper. Controls whether single or multiple items can be open.
+- **AromasAccordionItem**: Individual tabs. Uses **Slots** for both Title and Content, allowing users to edit typography, colors, and add other components directly in the Studio.
 
-1.  **Development Branch (`dev`):**
-    *   Set `PLASMIC_PREVIEW=true` in `.env.local`.
-    *   Develop React components and register them in `plasmic-init.js`.
-    *   Use these components in Plasmic Studio (synced via `localhost:3000/plasmic-host`).
-2.  **Code Deployment (Merge to `main`):**
-    *   Merge `dev` into `main` and push/deploy.
-    *   This ensures the production environment has the necessary React code *before* the design requires it.
-    *   The production site remains stable because `PLASMIC_PREVIEW` is `false` (or undefined) in production, still rendering the previous "Published" version.
-3.  **Visual Deployment (Publish in Plasmic):**
-    *   Once the code deploy is successful, click **Publish** in Plasmic Studio.
-    *   The production site now fetches the new design that utilizes the newly deployed code components.
-
-## Development Conventions
+### Development Conventions
 
 ### Git Branching
 - **`main`**: Production-ready code. Always reflects the stable, published version.
@@ -61,18 +54,11 @@ To ensure stability when working with both code components and visual design, fo
 
 ### Environment Configuration
 Local environment variables are managed in `.env.local` (ignored by Git).
-- **`PLASMIC_PREVIEW`**: Set to `true` to enable Plasmic's preview mode, allowing you to see unpublished changes from Plasmic Studio in real-time.
+- **`PLASMIC_PREVIEW`**: Set to `true` to enable Plasmic's preview mode. The configuration in `plasmic-init.js` automatically converts this to a boolean for the loader.
 
-### Plasmic Workflow
-- **Visual Editing**: Most page layouts and content are managed in Plasmic Studio.
-- **Preview Mode**: Controlled via `process.env.PLASMIC_PREVIEW` in `plasmic-init.js`. This allows developers to see live changes on `dev` without affecting the production build.
-- **Code Components**: If a component requires custom logic or data fetching that can't be handled in Plasmic, it should be created as a React component and registered in `plasmic-init.js` using `PLASMIC.registerComponent()`.
-- **App Hosting**: Ensure the Plasmic project settings point to the local or deployed `/plasmic-host` URL to enable real-time previews of custom components.
-
-### Routing
-- Static pages can still be created by adding files to the `pages/` directory.
-- The `[[...catchall]].jsx` file handles all routes not explicitly defined by other files in `pages/`, delegating them to Plasmic.
-
-### Styles
-- Global styles are located in `styles/globals.css`.
-- Component-specific styles should use CSS Modules (`*.module.css`).
+### Hybrid Development Workflow (Code + Design)
+1. **Develop** components in `dev` branch.
+2. **Register** in `plasmic-init.js`.
+3. **Use** in Plasmic Studio via `localhost:3000/plasmic-host`.
+4. **Merge** to `main` and deploy code.
+5. **Publish** in Plasmic Studio.
